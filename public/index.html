@@ -1,0 +1,33 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Absensi BPVP</title>
+</head>
+<body>
+  <h1>Sistem Absensi Digital</h1>
+  <form id="formAbsen">
+    <input type="text" id="nama" placeholder="Nama" required />
+    <input type="text" id="kelas" placeholder="Kelas" required />
+    <button type="submit">Absen</button>
+  </form>
+  <div id="hasil"></div>
+
+  <script>
+    document.getElementById('formAbsen').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nama = document.getElementById('nama').value;
+      const kelas = document.getElementById('kelas').value;
+
+      const res = await fetch('/api/absensi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nama, kelas })
+      });
+
+      const data = await res.json();
+      document.getElementById('hasil').innerHTML = `<p>${data.message || data.error}</p>`;
+    });
+  </script>
+</body>
+</html>
