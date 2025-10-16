@@ -1,65 +1,64 @@
-const Database = require('better-sqlite3');
-const bcrypt = require('bcrypt');
-const path = require('path');
+// database.js
+import { createClient } from '@supabase/supabase-js';
 
-const db = new Database(path.join(__dirname, 'absensi.db'));
+// GANTI DENGAN KREDENSIAL DARI SUPABASE ANDA
+const supabaseUrl = 'https://xxxx.supabase.co'; // ← Ganti ini!
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxxxx'; // ← Ganti ini!
 
-db.exec(`
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-  CREATE TABLE IF NOT EXISTS programs (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
+// Fungsi: Ambil semua data absensi
+export async function getAbsensi() {
+  const { data, error } = await supabase
+    .from('absensi')
+    .select('*')
+    .order('created_at', { ascending: false });
 
-  CREATE TABLE IF NOT EXISTS attendances (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    program_id INTEGER,
-    nama TEXT NOT NULL,
-    jenis_kelamin TEXT NOT NULL,
-    pendidikan TEXT NOT NULL,
-    tempat_lahir TEXT NOT NULL,
-    tanggal_lahir TEXT NOT NULL,
-    alamat TEXT NOT NULL,
-    kabupaten TEXT NOT NULL,
-    nomor_hp TEXT NOT NULL,
-    nik TEXT NOT NULL,
-    email TEXT NOT NULL,
-    signature TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (program_id) REFERENCES programs(id)
-  );
-
-  CREATE TABLE IF NOT EXISTS settings (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    key TEXT UNIQUE NOT NULL,
-    value TEXT NOT NULL
-  );
-`);
-
-const checkSuperadmin = db.prepare('SELECT * FROM users WHERE username = ?').get('Pemberdayaan');
-if (!checkSuperadmin) {
-  const hashedPassword = bcrypt.hashSync('Kios3in1*', 10);
-  db.prepare('INSERT INTO users (username, password) VALUES (?, ?)').run('Pemberdayaan', hashedPassword);
-  console.log('Superadmin created: username = Pemberdayaan');
+  if (error) {
+    console.error('Error mengambil data:', error);
+    throw new Error('Gagal mengambil data absensi');
+  }
+  return data;
 }
 
-const checkAbsensiSetting = db.prepare('SELECT * FROM settings WHERE key = ?').get('absensi_status');
-if (!checkAbsensiSetting) {
-  db.prepare('INSERT INTO settings (key, value) VALUES (?, ?)').run('absensi_status', 'ON');
-  console.log('Absensi status initialized: ON');
+// Fungsi: Tambah data absensi
+export async function tambahAbsensi(nama, kelas) {
+  if (!nama || !kelas) {
+    throw new Error('Nama dan kelas tidak boleh kosong');
+  }
+
+  const { data, error } = await supabase
+    .from('absensi')
+    .insert([{ nama, kelas }])
+    .select();
+
+  if (error) {
+    console.error('Error menambah data:', error);
+    throw new Error('Gagal menambah data absensi');
+  }
+  return data[0];
 }
 
-const checkAbsensiMessage = db.prepare('SELECT * FROM settings WHERE key = ?').get('absensi_message');
-if (!checkAbsensiMessage) {
-  db.prepare('INSERT INTO settings (key, value) VALUES (?, ?)').run('absensi_message', 'Absensi OFF, hubungi admin di +6281243397116');
-  console.log('Absensi message initialized');
+// Fungsi: Hapus data absensi (opsional)
+export async function hapusAbsensi(id) {
+  const { error } = await supabase
+    .from('absensi')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error('Error menghapus data:', error);
+    throw new Error('Gagal menghapus data');
+  }
 }
 
-module.exports = db;
+// Fungsi: Ekspor ke CSV (opsional, bisa dipakai di route)
+export async function getAllAbsensiForCSV() {
+  const { data, error } = await supabase
+    .from('absensi')
+    .select('nama, kelas, tanggal, jam')
+    .order('tanggal', { ascending: false });
+
+  if (error) throw error;
+  return data;
+}
