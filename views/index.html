@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Absensi Digital - Pekan Vokasi BPVP Bantaeng</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow">
+          <div class="card-header bg-primary text-white text-center py-3">
+            <h3 class="mb-0">Sistem Absensi Digital</h3>
+            <p class="mb-0">Peserta Pelatihan Pekan Vokasi BPVP Bantaeng</p>
+          </div>
+          <div class="card-body p-4">
+            <form id="attendanceForm">
+              <div class="row mb-3">
+                <div class="col-md-12">
+                  <label class="form-label">Program Pelatihan *</label>
+                  <select class="form-select" id="program_id" required>
+                    <option value="">Pilih Program</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-8">
+                  <label class="form-label">Nama Lengkap *</label>
+                  <input type="text" class="form-control" id="nama" required>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Jenis Kelamin *</label>
+                  <select class="form-select" id="jenis_kelamin" required>
+                    <option value="">Pilih</option>
+                    <option value="L">Laki-laki</option>
+                    <option value="P">Perempuan</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Pendidikan Terakhir *</label>
+                  <select class="form-select" id="pendidikan" required>
+                    <option value="">Pilih</option>
+                    <option value="SD">SD</option>
+                    <option value="SMP">SMP</option>
+                    <option value="SMA">SMA</option>
+                    <option value="SMK">SMK</option>
+                    <option value="D1">D1</option>
+                    <option value="D2">D2</option>
+                    <option value="D3">D3</option>
+                    <option value="D4">D4</option>
+                    <option value="S1">S1</option>
+                    <option value="S2">S2</option>
+                    <option value="S3">S3</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Kabupaten *</label>
+                  <input type="text" class="form-control" id="kabupaten" required>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Tempat Lahir *</label>
+                  <input type="text" class="form-control" id="tempat_lahir" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Tanggal Lahir *</label>
+                  <input type="date" class="form-control" id="tanggal_lahir" required>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Alamat Lengkap *</label>
+                <textarea class="form-control" id="alamat" rows="2" required></textarea>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Nomor HP *</label>
+                  <input type="text" class="form-control" id="nomor_hp" placeholder="08xxxxxxxxxx" required>
+                  <small class="text-muted">Format: 08 akan otomatis diubah menjadi +62</small>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">NIK (16 digit) *</label>
+                  <input type="text" class="form-control" id="nik" maxlength="16" required>
+                  <small class="text-muted">Hanya angka, 16 digit</small>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Email *</label>
+                <input type="email" class="form-control" id="email" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Tanda Tangan Digital *</label>
+                <div class="border rounded p-2">
+                  <canvas id="signaturePad" width="700" height="200" style="max-width: 100%; border: 1px solid #ddd;"></canvas>
+                </div>
+                <button type="button" class="btn btn-sm btn-secondary mt-2" id="clearSignature">Hapus Tanda Tangan</button>
+              </div>
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">Kirim Absensi</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+  <script src="/js/attendance.js"></script>
+</body>
+</html>
