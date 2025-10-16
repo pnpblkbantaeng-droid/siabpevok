@@ -2,8 +2,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 // GANTI DENGAN KREDENSIAL DARI SUPABASE ANDA
-const supabaseUrl = 'https://xxxx.supabase.co'; // ← Ganti ini!
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxxxx'; // ← Ganti ini!
+const supabaseUrl = 'https://vbjpefjyulpopurjjexh.supabase.co'; // ← Ganti ini!
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZianBlZmp5dWxwb3B1cmpqZXhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1ODA0MjYsImV4cCI6MjA3NjE1NjQyNn0.iJYdv6SsKiK59wuH2eH0nctPkWTcOyZJpBXtg5-gBPI'; // ← Ganti ini!
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
